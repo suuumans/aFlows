@@ -1,4 +1,4 @@
-#aFlows
+# aFlows
 This is an application where you can create and manage your own agentic workflows.
 
 ## Getting Started
