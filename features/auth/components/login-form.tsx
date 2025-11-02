@@ -58,7 +58,7 @@ export function LoginForm() {
 
   return (
     <div className="flex flex-col justify-center items-center">
-      <Card className="mx-auto">
+      <Card>
         <CardHeader className="text-center">
           <CardTitle>Welcome back 😊</CardTitle>
           <CardDescription>Log in to your account to continue</CardDescription>
@@ -66,8 +66,8 @@ export function LoginForm() {
         <CardContent>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)}>
-              <div className="grid gap-3 justify-center">
-                <div className="flex flex-row gap-3">
+              <div className="grid gap-6">
+                <div className="flex flex-row gap-6">
                   <Button variant="outline" className="flex-1" type="button" disabled={isPending}>
                     <Image src="/logos/github-mark.svg" alt="github" width={20} height={20} />
                     Continue with Github
