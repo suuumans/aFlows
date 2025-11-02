@@ -1,10 +1,20 @@
 
-import { baseProcedure, createTRPCRouter } from "../init";
+import { createTRPCRouter, proctedProcedure } from "../init";
 import { prisma } from "@/lib/db";
 
+// This is the primary API route handler
 export const appRouter = createTRPCRouter({
-  getUsers: baseProcedure.query(() => {
-    return prisma.user.findMany();
+
+  // get all users from the database throuch procted route
+  getUsers: proctedProcedure.query(({ ctx }) => {
+
+    let userId = ctx.session.user.id;
+
+    return prisma.user.findMany({
+      where: {
+        id: userId,
+      },
+    });
   }),
 });
 
