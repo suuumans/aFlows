@@ -1,22 +1,12 @@
 
 import { LoginForm } from "@/features/auth/components/login-form";
 import { checkAuth } from "@/lib/auth-utils";
-import Image from "next/image";
-import Link from "next/link";
 
 const Page = async () => {
   await checkAuth();
 
   return (
-    <div className="bg-muted flex min-h-screen justify-center items-center p-4">
-      <div className="flex flex-col gap-6 w-full max-w-md">
-        <Link href="/" className="flex items-center gap-2 justify-center font-medium">
-          <Image src="/logos/Logoipsum-246.svg" alt="applogo" width={30} height={30} />
-          <span className="text-2xl text-primary">aFlows</span>
-        </Link>
-        <LoginForm />
-      </div>
-    </div>
+    <LoginForm />
   );
 };
 
