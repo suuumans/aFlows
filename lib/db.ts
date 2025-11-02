@@ -1,4 +1,3 @@
-
 // Use the generated client output path from `prisma/schema.prisma`.
 // The generator in the schema writes the client to `lib/generated/prisma`,
 // so import from that path instead of `@prisma/client`.
