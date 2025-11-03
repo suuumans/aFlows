@@ -1,6 +1,16 @@
 
 import { prisma } from "@/lib/db";
 import { inngest } from "./client";
+import { generateText } from "ai";
+import { createGoogleGenerativeAI } from "@ai-sdk/google";
+import { createOpenAI } from "@ai-sdk/openai";
+
+
+
+const gAi = createGoogleGenerativeAI();
+const openAi = createOpenAI();
+
+
 
 // Create a simple test function
 export const helloWorld = inngest.createFunction(
@@ -23,5 +33,27 @@ export const createPrismaWorkflow = inngest.createFunction(
         name: event.data.name,
       }
     })
+  }
+)
+
+export const aiFunction = inngest.createFunction(
+  { id: "ai-function" },
+  { event: "test/ai.function" },
+  async ({ event, step }) => {
+    // this is inngest specific way of calling ai
+    const { steps: geminiSteps } = await step.ai.wrap("gemini-generate-text", generateText, {
+      model: gAi("gemini-2.5-flash"),
+      system: "You are a helpful ai assistant, you will solve any query of the user",
+      temperature: 1,
+      prompt: "Do we humans even need ai?"
+    })
+
+    const { steps: openAiSteps } = await step.ai.wrap("openai-generate-text", generateText, {
+      model: openAi("gpt-3.5-turbo"),
+      temperature: 1,
+      prompt: "Do we humans even need ai?"
+    })
+
+    return { geminiSteps, openAiSteps }
   }
 )
