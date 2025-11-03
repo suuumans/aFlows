@@ -393,7 +393,8 @@ export const ModelName = {
   Flow: 'Flow',
   Session: 'Session',
   Account: 'Account',
-  Verification: 'Verification'
+  Verification: 'Verification',
+  Workfolw: 'Workfolw'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -409,7 +410,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "flow" | "session" | "account" | "verification"
+    modelProps: "user" | "flow" | "session" | "account" | "verification" | "workfolw"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -783,6 +784,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    Workfolw: {
+      payload: Prisma.$WorkfolwPayload<ExtArgs>
+      fields: Prisma.WorkfolwFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.WorkfolwFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WorkfolwPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.WorkfolwFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WorkfolwPayload>
+        }
+        findFirst: {
+          args: Prisma.WorkfolwFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WorkfolwPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.WorkfolwFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WorkfolwPayload>
+        }
+        findMany: {
+          args: Prisma.WorkfolwFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WorkfolwPayload>[]
+        }
+        create: {
+          args: Prisma.WorkfolwCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WorkfolwPayload>
+        }
+        createMany: {
+          args: Prisma.WorkfolwCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.WorkfolwCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WorkfolwPayload>[]
+        }
+        delete: {
+          args: Prisma.WorkfolwDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WorkfolwPayload>
+        }
+        update: {
+          args: Prisma.WorkfolwUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WorkfolwPayload>
+        }
+        deleteMany: {
+          args: Prisma.WorkfolwDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.WorkfolwUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.WorkfolwUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WorkfolwPayload>[]
+        }
+        upsert: {
+          args: Prisma.WorkfolwUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WorkfolwPayload>
+        }
+        aggregate: {
+          args: Prisma.WorkfolwAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateWorkfolw>
+        }
+        groupBy: {
+          args: Prisma.WorkfolwGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.WorkfolwGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.WorkfolwCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.WorkfolwCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -892,6 +967,17 @@ export const VerificationScalarFieldEnum = {
 } as const
 
 export type VerificationScalarFieldEnum = (typeof VerificationScalarFieldEnum)[keyof typeof VerificationScalarFieldEnum]
+
+
+export const WorkfolwScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type WorkfolwScalarFieldEnum = (typeof WorkfolwScalarFieldEnum)[keyof typeof WorkfolwScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1064,6 +1150,7 @@ export type GlobalOmitConfig = {
   session?: Prisma.SessionOmit
   account?: Prisma.AccountOmit
   verification?: Prisma.VerificationOmit
+  workfolw?: Prisma.WorkfolwOmit
 }
 
 /* Types for Logging */

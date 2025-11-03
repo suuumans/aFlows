@@ -68,3 +68,8 @@ export type Account = Prisma.AccountModel
  * 
  */
 export type Verification = Prisma.VerificationModel
+/**
+ * Model Workfolw
+ * 
+ */
+export type Workfolw = Prisma.WorkfolwModel
