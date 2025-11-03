@@ -4,6 +4,7 @@ import { inngest } from "./client";
 import { generateText } from "ai";
 import { createGoogleGenerativeAI } from "@ai-sdk/google";
 import { createOpenAI } from "@ai-sdk/openai";
+import * as Sentry from "@sentry/nextjs";
 
 
 
@@ -40,20 +41,33 @@ export const aiFunction = inngest.createFunction(
   { id: "ai-function" },
   { event: "test/ai.function" },
   async ({ event, step }) => {
+
+    Sentry.logger.info('User triggered test log', { log_source: 'sentry_test' })
+
     // this is inngest specific way of calling ai
     const { steps: geminiSteps } = await step.ai.wrap("gemini-generate-text", generateText, {
       model: gAi("gemini-2.5-flash"),
       system: "You are a helpful ai assistant, you will solve any query of the user",
       temperature: 1,
-      prompt: "Do we humans even need ai?"
+      prompt: "what is 3 + 4?",
+      experimental_telemetry: {
+        isEnabled: true,
+        recordInputs: true,
+        recordOutputs: true,
+      },
     })
 
-    const { steps: openAiSteps } = await step.ai.wrap("openai-generate-text", generateText, {
-      model: openAi("gpt-3.5-turbo"),
-      temperature: 1,
-      prompt: "Do we humans even need ai?"
-    })
+    // const { steps: openAiSteps } = await step.ai.wrap("openai-generate-text", generateText, {
+    //   model: openAi("gpt-3.5-turbo"),
+    //   temperature: 1,
+    //   prompt: "Do we humans even need ai?",
+    //   experimental_telemetry: {
+    //     isEnabled: true,
+    //     recordInputs: true,
+    //     recordOutputs: true,
+    //   },
+    // })
 
-    return { geminiSteps, openAiSteps }
+    return { geminiSteps }
   }
 )
