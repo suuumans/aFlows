@@ -1,4 +1,5 @@
 
+import { inngest } from "@/inngest/client";
 import { createTRPCRouter, proctedProcedure } from "../init";
 import { prisma } from "@/lib/db";
 
@@ -6,15 +7,25 @@ import { prisma } from "@/lib/db";
 export const appRouter = createTRPCRouter({
 
   // get all users from the database throuch procted route
-  getUsers: proctedProcedure.query(({ ctx }) => {
+  getWorkFlows: proctedProcedure.query(({ ctx }) => {
 
-    let userId = ctx.session.user.id;
-
-    return prisma.user.findMany({
+    return prisma.workfolw.findFirst({
       where: {
-        id: userId,
-      },
+        name: ctx.session.user.name ?? "Sumans"
+      }
     });
+  }),
+  
+  // create a workflow
+  createWorkflow: proctedProcedure.mutation(async ({ ctx }) => {
+    await inngest.send({
+      name: "test/create.prisma.workflow",
+      data: {
+        name: ctx.session.user.name ?? "Sumans"
+      }
+    })
+
+    return { success: true, message: "Workflow created successfully" };
   }),
 });
 
