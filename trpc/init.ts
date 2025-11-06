@@ -1,5 +1,6 @@
 
 import { auth } from "@/lib/auth";
+import { polar } from "@/lib/polar";
 import { initTRPC, TRPCError } from "@trpc/server";
 import { headers } from "next/headers";
 import { cache } from "react";
@@ -44,6 +45,27 @@ export const proctedProcedure = baseProcedure.use(async ({ ctx, next }) => {
     ctx: {
       ...ctx,
       session: session,
+    },
+  });
+});
+
+// premeiumProcedure: only for users with premium plan
+export const premeiumProcedure = proctedProcedure.use(async ({ ctx, next }) => {
+  const customer = await polar.customers.getStateExternal({
+    externalId: ctx.session?.user.id ?? ctx.session?.session.userId
+  })
+  // if customer has no active subscription then throw UNAUTHORIZED
+  if (!customer.activeSubscriptions || customer.activeSubscriptions.length === 0) {
+    throw new TRPCError({
+      code: "FORBIDDEN",
+      message: "Acitive subscription required"
+    });
+  }
+  // Pass the customer to the next middleware
+  return next({
+    ctx: {
+      ...ctx,
+      customer: customer,
     },
   });
 });
