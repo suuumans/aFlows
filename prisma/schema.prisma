@@ -26,6 +26,7 @@ model User {
   image         String?
   sessions      Session[]
   accounts      Account[]
+  workfolws     Workfolw[]
 
   @@map("user")
 }
@@ -92,4 +93,6 @@ model Workfolw {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   deletedAt DateTime?
+  userId  String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
