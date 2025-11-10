@@ -29,7 +29,7 @@ export const createPrismaWorkflow = inngest.createFunction(
   { id: "create-prisma-workflow" },
   { event: "test/create.prisma.workflow" },
   async ({ event, step }) => {
-    await prisma.workfolw.create({
+    await prisma.Workflow.create({
       data: {
         name: event.data.name,
       }
