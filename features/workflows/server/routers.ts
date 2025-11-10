@@ -10,7 +10,7 @@ export const workflowsRouter = createTRPCRouter({
 
   // create a workflow
   create: premeiumProcedure.mutation(({ ctx }) => {
-    return prisma.workfolw.create({
+    return prisma.Workflow.create({
       data: {
         name: generateSlug(3),
         userId: ctx.session.user.id
@@ -24,7 +24,7 @@ export const workflowsRouter = createTRPCRouter({
     id: z.string()
   }))
   .mutation(({ ctx, input }) => {
-    return prisma.workfolw.delete({
+    return prisma.Workflow.delete({
       where: {
         id: input.id,
         userId: ctx.session.user.id
@@ -38,7 +38,7 @@ export const workflowsRouter = createTRPCRouter({
     id: z.string()
   }))
   .query(({ ctx, input }) => {
-    return prisma.workfolw.findUnique({
+    return prisma.Workflow.findUnique({
       where: {
         id: input.id,
         userId: ctx.session.user.id
@@ -48,7 +48,7 @@ export const workflowsRouter = createTRPCRouter({
 
   // get all workflows
   getAll: proctedProcedure.query(({ ctx }) => {
-    return prisma.workfolw.findMany({
+    return prisma.Workflow.findMany({
       where: {
         userId: ctx.session.user.id
       }
@@ -62,7 +62,7 @@ export const workflowsRouter = createTRPCRouter({
     name: z.string().min(3)
   }))
   .mutation(({ ctx, input }) => {
-    return prisma.workfolw.update({
+    return prisma.Workflow.update({
       where: {
         id: input.id,
         userId: ctx.session.user.id

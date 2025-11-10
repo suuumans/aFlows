@@ -54,7 +54,7 @@ export const ModelName = {
   Session: 'Session',
   Account: 'Account',
   Verification: 'Verification',
-  Workfolw: 'Workfolw'
+  Workflow: 'Workflow'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -145,7 +145,7 @@ export const VerificationScalarFieldEnum = {
 export type VerificationScalarFieldEnum = (typeof VerificationScalarFieldEnum)[keyof typeof VerificationScalarFieldEnum]
 
 
-export const WorkfolwScalarFieldEnum = {
+export const WorkflowScalarFieldEnum = {
   id: 'id',
   name: 'name',
   createdAt: 'createdAt',
@@ -154,7 +154,7 @@ export const WorkfolwScalarFieldEnum = {
   userId: 'userId'
 } as const
 
-export type WorkfolwScalarFieldEnum = (typeof WorkfolwScalarFieldEnum)[keyof typeof WorkfolwScalarFieldEnum]
+export type WorkflowScalarFieldEnum = (typeof WorkflowScalarFieldEnum)[keyof typeof WorkflowScalarFieldEnum]
 
 
 export const SortOrder = {

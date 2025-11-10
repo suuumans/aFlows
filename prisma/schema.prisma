@@ -26,7 +26,7 @@ model User {
   image         String?
   sessions      Session[]
   accounts      Account[]
-  workfolws     Workfolw[]
+  Workflows     Workflow[]
 
   @@map("user")
 }
@@ -87,7 +87,7 @@ model Verification {
   @@map("verification")
 }
 
-model Workfolw {
+model Workflow {
   id        String   @id  @default(cuid())
   name      String
   createdAt DateTime @default(now())
