@@ -11,7 +11,7 @@ export const workflowsRouter = createTRPCRouter({
 
   // create a workflow
   create: premeiumProcedure.mutation(({ ctx }) => {
-    return prisma.Workflow.create({
+    return prisma.workflow.create({
       data: {
         name: generateSlug(3),
         userId: ctx.session.user.id
@@ -25,7 +25,7 @@ export const workflowsRouter = createTRPCRouter({
     id: z.string()
   }))
   .mutation(({ ctx, input }) => {
-    return prisma.Workflow.delete({
+    return prisma.workflow.delete({
       where: {
         id: input.id,
         userId: ctx.session.user.id
@@ -39,7 +39,7 @@ export const workflowsRouter = createTRPCRouter({
     id: z.string()
   }))
   .query(({ ctx, input }) => {
-    return prisma.Workflow.findUnique({
+    return prisma.workflow.findUnique({
       where: {
         id: input.id,
         userId: ctx.session.user.id
@@ -60,7 +60,7 @@ export const workflowsRouter = createTRPCRouter({
     const { page, pageSize, search } = input;
 
     const [items, totalCount] = await Promise.all([
-      prisma.Workflow.findMany({
+      prisma.workflow.findMany({
         skip: (page - 1) * pageSize,
         take: pageSize,
         where: {
@@ -75,9 +75,13 @@ export const workflowsRouter = createTRPCRouter({
         },
       }),
       
-      prisma.Workflow.count({
+      prisma.workflow.count({
         where: {
-          userId: ctx.session.user.id
+          userId: ctx.session.user.id,
+          name: {
+            contains: search,
+            mode: "insensitive"
+          },
         }
       })
     ]);
@@ -104,7 +108,7 @@ export const workflowsRouter = createTRPCRouter({
     name: z.string().min(3)
   }))
   .mutation(({ ctx, input }) => {
-    return prisma.Workflow.update({
+    return prisma.workflow.update({
       where: {
         id: input.id,
         userId: ctx.session.user.id

@@ -477,7 +477,7 @@ export type WorkflowSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   deletedAt?: boolean
   userId?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-}, ExtArgs["result"]["Workflow"]>
+}, ExtArgs["result"]["workflow"]>
 
 export type WorkflowSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -487,7 +487,7 @@ export type WorkflowSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   deletedAt?: boolean
   userId?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-}, ExtArgs["result"]["Workflow"]>
+}, ExtArgs["result"]["workflow"]>
 
 export type WorkflowSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -497,7 +497,7 @@ export type WorkflowSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   deletedAt?: boolean
   userId?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-}, ExtArgs["result"]["Workflow"]>
+}, ExtArgs["result"]["workflow"]>
 
 export type WorkflowSelectScalar = {
   id?: boolean
@@ -508,7 +508,7 @@ export type WorkflowSelectScalar = {
   userId?: boolean
 }
 
-export type WorkflowOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "createdAt" | "updatedAt" | "deletedAt" | "userId", ExtArgs["result"]["Workflow"]>
+export type WorkflowOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "createdAt" | "updatedAt" | "deletedAt" | "userId", ExtArgs["result"]["workflow"]>
 export type WorkflowInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
@@ -531,7 +531,7 @@ export type $WorkflowPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     updatedAt: Date
     deletedAt: Date | null
     userId: string
-  }, ExtArgs["result"]["Workflow"]>
+  }, ExtArgs["result"]["workflow"]>
   composites: {}
 }
 
@@ -549,7 +549,7 @@ export interface WorkflowDelegate<ExtArgs extends runtime.Types.Extensions.Inter
    * @param {WorkflowFindUniqueArgs} args - Arguments to find a Workflow
    * @example
    * // Get one Workflow
-   * const Workflow = await prisma.Workflow.findUnique({
+   * const workflow = await prisma.workflow.findUnique({
    *   where: {
    *     // ... provide filter here
    *   }
@@ -563,7 +563,7 @@ export interface WorkflowDelegate<ExtArgs extends runtime.Types.Extensions.Inter
    * @param {WorkflowFindUniqueOrThrowArgs} args - Arguments to find a Workflow
    * @example
    * // Get one Workflow
-   * const Workflow = await prisma.Workflow.findUniqueOrThrow({
+   * const workflow = await prisma.workflow.findUniqueOrThrow({
    *   where: {
    *     // ... provide filter here
    *   }
@@ -578,7 +578,7 @@ export interface WorkflowDelegate<ExtArgs extends runtime.Types.Extensions.Inter
    * @param {WorkflowFindFirstArgs} args - Arguments to find a Workflow
    * @example
    * // Get one Workflow
-   * const Workflow = await prisma.Workflow.findFirst({
+   * const workflow = await prisma.workflow.findFirst({
    *   where: {
    *     // ... provide filter here
    *   }
@@ -594,7 +594,7 @@ export interface WorkflowDelegate<ExtArgs extends runtime.Types.Extensions.Inter
    * @param {WorkflowFindFirstOrThrowArgs} args - Arguments to find a Workflow
    * @example
    * // Get one Workflow
-   * const Workflow = await prisma.Workflow.findFirstOrThrow({
+   * const workflow = await prisma.workflow.findFirstOrThrow({
    *   where: {
    *     // ... provide filter here
    *   }
@@ -609,13 +609,13 @@ export interface WorkflowDelegate<ExtArgs extends runtime.Types.Extensions.Inter
    * @param {WorkflowFindManyArgs} args - Arguments to filter and select certain fields only.
    * @example
    * // Get all Workflows
-   * const Workflows = await prisma.Workflow.findMany()
+   * const workflows = await prisma.workflow.findMany()
    * 
    * // Get first 10 Workflows
-   * const Workflows = await prisma.Workflow.findMany({ take: 10 })
+   * const workflows = await prisma.workflow.findMany({ take: 10 })
    * 
    * // Only select the `id`
-   * const WorkflowWithIdOnly = await prisma.Workflow.findMany({ select: { id: true } })
+   * const workflowWithIdOnly = await prisma.workflow.findMany({ select: { id: true } })
    * 
    */
   findMany<T extends WorkflowFindManyArgs>(args?: Prisma.SelectSubset<T, WorkflowFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WorkflowPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
@@ -625,7 +625,7 @@ export interface WorkflowDelegate<ExtArgs extends runtime.Types.Extensions.Inter
    * @param {WorkflowCreateArgs} args - Arguments to create a Workflow.
    * @example
    * // Create one Workflow
-   * const Workflow = await prisma.Workflow.create({
+   * const Workflow = await prisma.workflow.create({
    *   data: {
    *     // ... data to create a Workflow
    *   }
@@ -639,7 +639,7 @@ export interface WorkflowDelegate<ExtArgs extends runtime.Types.Extensions.Inter
    * @param {WorkflowCreateManyArgs} args - Arguments to create many Workflows.
    * @example
    * // Create many Workflows
-   * const Workflow = await prisma.Workflow.createMany({
+   * const workflow = await prisma.workflow.createMany({
    *   data: [
    *     // ... provide data here
    *   ]
@@ -653,14 +653,14 @@ export interface WorkflowDelegate<ExtArgs extends runtime.Types.Extensions.Inter
    * @param {WorkflowCreateManyAndReturnArgs} args - Arguments to create many Workflows.
    * @example
    * // Create many Workflows
-   * const Workflow = await prisma.Workflow.createManyAndReturn({
+   * const workflow = await prisma.workflow.createManyAndReturn({
    *   data: [
    *     // ... provide data here
    *   ]
    * })
    * 
    * // Create many Workflows and only return the `id`
-   * const WorkflowWithIdOnly = await prisma.Workflow.createManyAndReturn({
+   * const workflowWithIdOnly = await prisma.workflow.createManyAndReturn({
    *   select: { id: true },
    *   data: [
    *     // ... provide data here
@@ -677,7 +677,7 @@ export interface WorkflowDelegate<ExtArgs extends runtime.Types.Extensions.Inter
    * @param {WorkflowDeleteArgs} args - Arguments to delete one Workflow.
    * @example
    * // Delete one Workflow
-   * const Workflow = await prisma.Workflow.delete({
+   * const Workflow = await prisma.workflow.delete({
    *   where: {
    *     // ... filter to delete one Workflow
    *   }
@@ -691,7 +691,7 @@ export interface WorkflowDelegate<ExtArgs extends runtime.Types.Extensions.Inter
    * @param {WorkflowUpdateArgs} args - Arguments to update one Workflow.
    * @example
    * // Update one Workflow
-   * const Workflow = await prisma.Workflow.update({
+   * const workflow = await prisma.workflow.update({
    *   where: {
    *     // ... provide filter here
    *   },
@@ -708,7 +708,7 @@ export interface WorkflowDelegate<ExtArgs extends runtime.Types.Extensions.Inter
    * @param {WorkflowDeleteManyArgs} args - Arguments to filter Workflows to delete.
    * @example
    * // Delete a few Workflows
-   * const { count } = await prisma.Workflow.deleteMany({
+   * const { count } = await prisma.workflow.deleteMany({
    *   where: {
    *     // ... provide filter here
    *   }
@@ -724,7 +724,7 @@ export interface WorkflowDelegate<ExtArgs extends runtime.Types.Extensions.Inter
    * @param {WorkflowUpdateManyArgs} args - Arguments to update one or more rows.
    * @example
    * // Update many Workflows
-   * const Workflow = await prisma.Workflow.updateMany({
+   * const workflow = await prisma.workflow.updateMany({
    *   where: {
    *     // ... provide filter here
    *   },
@@ -741,7 +741,7 @@ export interface WorkflowDelegate<ExtArgs extends runtime.Types.Extensions.Inter
    * @param {WorkflowUpdateManyAndReturnArgs} args - Arguments to update many Workflows.
    * @example
    * // Update many Workflows
-   * const Workflow = await prisma.Workflow.updateManyAndReturn({
+   * const workflow = await prisma.workflow.updateManyAndReturn({
    *   where: {
    *     // ... provide filter here
    *   },
@@ -751,7 +751,7 @@ export interface WorkflowDelegate<ExtArgs extends runtime.Types.Extensions.Inter
    * })
    * 
    * // Update zero or more Workflows and only return the `id`
-   * const WorkflowWithIdOnly = await prisma.Workflow.updateManyAndReturn({
+   * const workflowWithIdOnly = await prisma.workflow.updateManyAndReturn({
    *   select: { id: true },
    *   where: {
    *     // ... provide filter here
@@ -771,7 +771,7 @@ export interface WorkflowDelegate<ExtArgs extends runtime.Types.Extensions.Inter
    * @param {WorkflowUpsertArgs} args - Arguments to update or create a Workflow.
    * @example
    * // Update or create a Workflow
-   * const Workflow = await prisma.Workflow.upsert({
+   * const workflow = await prisma.workflow.upsert({
    *   create: {
    *     // ... data to create a Workflow
    *   },
@@ -793,7 +793,7 @@ export interface WorkflowDelegate<ExtArgs extends runtime.Types.Extensions.Inter
    * @param {WorkflowCountArgs} args - Arguments to filter Workflows to count.
    * @example
    * // Count the number of Workflows
-   * const count = await prisma.Workflow.count({
+   * const count = await prisma.workflow.count({
    *   where: {
    *     // ... the filter for the Workflows we want to count
    *   }

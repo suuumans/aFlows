@@ -411,7 +411,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "flow" | "session" | "account" | "verification" | "Workflow"
+    modelProps: "user" | "flow" | "session" | "account" | "verification" | "workflow"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1152,7 +1152,7 @@ export type GlobalOmitConfig = {
   session?: Prisma.SessionOmit
   account?: Prisma.AccountOmit
   verification?: Prisma.VerificationOmit
-  Workflow?: Prisma.WorkflowOmit
+  workflow?: Prisma.WorkflowOmit
 }
 
 /* Types for Logging */
