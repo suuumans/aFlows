@@ -47,7 +47,6 @@ const config: runtime.GetPrismaClientConfig = {
     "db"
   ],
   "activeProvider": "postgresql",
-  "postinstall": true,
   "inlineDatasources": {
     "db": {
       "url": {
@@ -57,7 +56,7 @@ const config: runtime.GetPrismaClientConfig = {
     }
   },
   "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider = \"prisma-client\"\n  output   = \"../generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel User {\n  id            String     @id @default(uuid())\n  createdAt     DateTime   @default(now())\n  updatedAt     DateTime   @updatedAt\n  name          String\n  email         String     @unique\n  password      String?\n  flows         Flow[]\n  emailVerified Boolean    @default(false)\n  image         String?\n  sessions      Session[]\n  accounts      Account[]\n  Workflows     Workflow[]\n\n  @@map(\"user\")\n}\n\nmodel Flow {\n  id        String   @id @default(uuid())\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n  title     String\n  content   String\n  published Boolean  @default(false)\n  author    User     @relation(fields: [authorId], references: [id])\n  authorId  String\n}\n\nmodel Session {\n  id        String   @id\n  expiresAt DateTime\n  token     String\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n  ipAddress String?\n  userAgent String?\n  userId    String\n  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)\n\n  @@unique([token])\n  @@map(\"session\")\n}\n\nmodel Account {\n  id                    String    @id\n  accountId             String\n  providerId            String\n  userId                String\n  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)\n  accessToken           String?\n  refreshToken          String?\n  idToken               String?\n  accessTokenExpiresAt  DateTime?\n  refreshTokenExpiresAt DateTime?\n  scope                 String?\n  password              String?\n  createdAt             DateTime  @default(now())\n  updatedAt             DateTime  @updatedAt\n\n  @@map(\"account\")\n}\n\nmodel Verification {\n  id         String   @id\n  identifier String\n  value      String\n  expiresAt  DateTime\n  createdAt  DateTime @default(now())\n  updatedAt  DateTime @default(now()) @updatedAt\n\n  @@map(\"verification\")\n}\n\nmodel Workflow {\n  id        String    @id @default(cuid())\n  name      String\n  createdAt DateTime  @default(now())\n  updatedAt DateTime  @updatedAt\n  deletedAt DateTime?\n  userId    String\n  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)\n}\n",
-  "inlineSchemaHash": "782ee0a938bbee63ceab8eabda901a2027abcb4d2c1d4369e538c0d0ed1d05cf",
+  "inlineSchemaHash": "17c3e3c13bfb1fe3398a3419a14cbc0782624a3b3052400888a5e171e9b22a4d",
   "copyEngine": true,
   "runtimeDataModel": {
     "models": {},
@@ -253,14 +252,14 @@ export interface PrismaClient<
   get verification(): Prisma.VerificationDelegate<ExtArgs, { omit: OmitOpts }>;
 
   /**
-   * `prisma.Workflow`: Exposes CRUD operations for the **Workflow** model.
+   * `prisma.workflow`: Exposes CRUD operations for the **Workflow** model.
     * Example usage:
     * ```ts
     * // Fetch zero or more Workflows
-    * const Workflows = await prisma.Workflow.findMany()
+    * const workflows = await prisma.workflow.findMany()
     * ```
     */
-  get Workflow(): Prisma.WorkflowDelegate<ExtArgs, { omit: OmitOpts }>;
+  get workflow(): Prisma.WorkflowDelegate<ExtArgs, { omit: OmitOpts }>;
 }
 
 export function getPrismaClientClass(dirname: string): PrismaClientConstructor {
