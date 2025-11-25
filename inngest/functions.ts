@@ -1,4 +1,3 @@
-
 import { prisma } from "@/lib/db";
 import { inngest } from "./client";
 import { generateText } from "ai";
@@ -6,12 +5,8 @@ import { createGoogleGenerativeAI } from "@ai-sdk/google";
 import { createOpenAI } from "@ai-sdk/openai";
 import * as Sentry from "@sentry/nextjs";
 
-
-
 const gAi = createGoogleGenerativeAI();
 const openAi = createOpenAI();
-
-
 
 // Create a simple test function
 export const helloWorld = inngest.createFunction(
@@ -32,17 +27,16 @@ export const createPrismaWorkflow = inngest.createFunction(
     await prisma.Workflow.create({
       data: {
         name: event.data.name,
-      }
-    })
+      },
+    });
   }
-)
+);
 
 export const aiFunction = inngest.createFunction(
   { id: "ai-function" },
   { event: "test/ai.function" },
   async ({ event, step }) => {
-
-    Sentry.logger.info('User triggered test log', { log_source: 'sentry_test' })
+    Sentry.logger.info("User triggered test log", { log_source: "sentry_test" });
 
     // this is inngest specific way of calling ai
     const { steps: geminiSteps } = await step.ai.wrap("gemini-generate-text", generateText, {
@@ -55,7 +49,7 @@ export const aiFunction = inngest.createFunction(
         recordInputs: true,
         recordOutputs: true,
       },
-    })
+    });
 
     // const { steps: openAiSteps } = await step.ai.wrap("openai-generate-text", generateText, {
     //   model: openAi("gpt-3.5-turbo"),
@@ -68,6 +62,6 @@ export const aiFunction = inngest.createFunction(
     //   },
     // })
 
-    return { geminiSteps }
+    return { geminiSteps };
   }
-)
+);

@@ -1,5 +1,9 @@
-
-import { WorkflowsContainer, WorkflowsError, WorkflowsList, WorkflowsLoading } from "@/features/workflows/components/workflows";
+import {
+  WorkflowsContainer,
+  WorkflowsError,
+  WorkflowsList,
+  WorkflowsLoading,
+} from "@/features/workflows/components/workflows";
 import { workflowsParamsLoader } from "@/features/workflows/server/load-params";
 import { prefetchWorkflows } from "@/features/workflows/server/prefetch";
 import { requireAuth } from "@/lib/auth-utils";
@@ -8,13 +12,11 @@ import type { SearchParams } from "nuqs/server";
 import { Suspense } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 
-
 type Props = {
-  searchParams: Promise<SearchParams>
-}
+  searchParams: Promise<SearchParams>;
+};
 
 const Page = async ({ searchParams }: Props) => {
-
   await requireAuth();
 
   const params = await workflowsParamsLoader(searchParams);
@@ -31,7 +33,7 @@ const Page = async ({ searchParams }: Props) => {
         </ErrorBoundary>
       </HydrateClient>
     </WorkflowsContainer>
-  )
-}
+  );
+};
 
-export default Page
+export default Page;

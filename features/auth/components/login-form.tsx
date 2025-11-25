@@ -67,7 +67,7 @@ export function LoginForm() {
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)}>
               <div className="grid gap-6">
-                <div className="flex flex-col sm:flex-row gap-4">
+                <div className="flex flex-col gap-4 sm:flex-row">
                   <Button variant="outline" className="flex-1" type="button" disabled={isPending}>
                     <Image src="/logos/github-mark.svg" alt="github" width={20} height={20} />
                     Continue with Github
