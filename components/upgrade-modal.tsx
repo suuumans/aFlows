@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import {
   AlertDialog,
@@ -9,8 +9,8 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@/components/ui/alert-dialog"
-import { authClient } from "@/lib/auth-client"
+} from "@/components/ui/alert-dialog";
+import { authClient } from "@/lib/auth-client";
 
 interface UpgradeModalProps {
   open: boolean;
@@ -31,8 +31,8 @@ export const UpgradeModal = ({ open, onOpenChange }: UpgradeModalProps) => {
           <AlertDialogCancel>Cancel</AlertDialogCancel>
           <AlertDialogAction
             onClick={async () => {
-              await authClient.checkout({ slug: "aFlows"})
-              onOpenChange(false)
+              await authClient.checkout({ slug: "aFlows" });
+              onOpenChange(false);
             }}
           >
             Upgrade to Premium now!
@@ -40,5 +40,5 @@ export const UpgradeModal = ({ open, onOpenChange }: UpgradeModalProps) => {
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
-  )
-}
+  );
+};

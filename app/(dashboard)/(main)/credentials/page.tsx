@@ -7,7 +7,7 @@ const Page = async () => {
     <div>
       <h1>Credentials Page</h1>
     </div>
-  )
-}
+  );
+};
 
-export default Page
+export default Page;

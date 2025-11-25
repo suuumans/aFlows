@@ -1,117 +1,131 @@
-'use client'
+"use client";
 
-import Link from "next/link"
-import { SaveIcon } from "lucide-react"
+import Link from "next/link";
+import { SaveIcon } from "lucide-react";
 import { useEffect, useState, useRef } from "react";
-import { useSuspenseWorkflow, useUpdateWorkflowName } from "@/features/workflows/hooks/use-workflows"
+import { useSuspenseWorkflow, useUpdateWorkflowName } from "@/features/workflows/hooks/use-workflows";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button"
-import { SidebarTrigger } from "@/components/ui/sidebar"
-import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbSeparator } from "@/components/ui/breadcrumb"
-
+import { Button } from "@/components/ui/button";
+import { SidebarTrigger } from "@/components/ui/sidebar";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 
 export const EditorSaveButton = ({ workflowId }: { workflowId: string }) => {
-    return (
-        <div className="ml-auto">
-            <Button size="sm" onClick={() => { }} disabled={false}>
-                <SaveIcon className="size-4" />
-                Save
-            </Button>
-        </div>
-    )
-}
+  return (
+    <div className="ml-auto">
+      <Button size="sm" onClick={() => {}} disabled={false}>
+        <SaveIcon className="size-4" />
+        Save
+      </Button>
+    </div>
+  );
+};
 
 export const EditorNameInput = ({ workflowId }: { workflowId: string }) => {
+  const { data: workflow } = useSuspenseWorkflow(workflowId);
+  const updateWorkflowName = useUpdateWorkflowName();
 
-    const { data: workflow } = useSuspenseWorkflow(workflowId)
-    const updateWorkflowName = useUpdateWorkflowName()
+  const [isEditing, setIsEditing] = useState(false);
+  const [name, setName] = useState(workflow.name);
 
-    const [isEditing, setIsEditing] = useState(false)
-    const [name, setName] = useState(workflow.name)
+  const inputRef = useRef<HTMLInputElement>(null);
 
-    const inputRef = useRef<HTMLInputElement>(null)
+  useEffect(() => {
+    if (workflow.name) {
+      setName(workflow.name);
+    }
+  }, [workflow.name]);
 
-    useEffect(() => {
-        if (workflow.name) {
-            setName(workflow.name)
-        }
-    }, [workflow.name])
+  useEffect(() => {
+    if (isEditing && inputRef.current) {
+      inputRef.current.focus();
+      inputRef.current.select();
+    }
+  }, [isEditing]);
 
-    useEffect(() => {
-        if (isEditing && inputRef.current) {
-            inputRef.current.focus()
-            inputRef.current.select()
-        }
-    }, [isEditing])
-
-    const handleSave = async () => {
-        if (name === workflow.name) {
-            setIsEditing(false)
-            return
-        }
-
-        try {
-            await updateWorkflowName.mutateAsync({
-                id: workflowId,
-                name
-            })
-        } catch {
-            setName(workflow.name)
-        } finally {
-            setIsEditing(false)
-        }
+  const handleSave = async () => {
+    if (name === workflow.name) {
+      setIsEditing(false);
+      return;
     }
 
-    const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-        if (event.key === "Enter") {
-            handleSave()
-        } else if (event.key === "Escape") {
-            setIsEditing(false)
-        }
+    try {
+      await updateWorkflowName.mutateAsync({
+        id: workflowId,
+        name,
+      });
+    } catch {
+      setName(workflow.name);
+    } finally {
+      setIsEditing(false);
     }
+  };
 
-    if (isEditing) {
-        return (
-            <Input ref={inputRef} value={name} onChange={(e) => setName(e.target.value)} onKeyDown={handleKeyDown} onBlur={handleSave} disabled={updateWorkflowName.isPending} className="w-auto h-7 min-w-[200px] px-2" />
-        )
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter") {
+      handleSave();
+    } else if (event.key === "Escape") {
+      setIsEditing(false);
     }
+  };
 
+  if (isEditing) {
     return (
-        <BreadcrumbItem className="cursor-pointer hover:text-foreground transition-colors" onClick={() => setIsEditing(true)}>
-            {workflow.name}
-        </BreadcrumbItem>
-    )
-}
+      <Input
+        ref={inputRef}
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+        onKeyDown={handleKeyDown}
+        onBlur={handleSave}
+        disabled={updateWorkflowName.isPending}
+        className="h-7 w-auto min-w-[200px] px-2"
+      />
+    );
+  }
+
+  return (
+    <BreadcrumbItem
+      className="hover:text-foreground cursor-pointer transition-colors"
+      onClick={() => setIsEditing(true)}
+    >
+      {workflow.name}
+    </BreadcrumbItem>
+  );
+};
 
 export const EditorBreadcrumbs = ({ workflowId }: { workflowId: string }) => {
-    return (
-        <Breadcrumb>
-            <BreadcrumbList>
-                <BreadcrumbItem>
-                    <BreadcrumbLink asChild>
-                        <Link prefetch href="/workflows">
-                            Workflows
-                        </Link>
-                    </BreadcrumbLink>
-                </BreadcrumbItem>
-                <BreadcrumbSeparator />
-                <EditorNameInput workflowId={workflowId} />
-            </BreadcrumbList>
-        </Breadcrumb>
-    )
-}
+  return (
+    <Breadcrumb>
+      <BreadcrumbList>
+        <BreadcrumbItem>
+          <BreadcrumbLink asChild>
+            <Link prefetch href="/workflows">
+              Workflows
+            </Link>
+          </BreadcrumbLink>
+        </BreadcrumbItem>
+        <BreadcrumbSeparator />
+        <EditorNameInput workflowId={workflowId} />
+      </BreadcrumbList>
+    </Breadcrumb>
+  );
+};
 
 export const WorkflowsEditorHeader = ({ workflowId }: { workflowId: string }) => {
+  const { data: workflow } = useSuspenseWorkflow(workflowId);
 
-    const { data: workflow } = useSuspenseWorkflow(workflowId)
-
-    return (
-        <header className="flex h-14 shrink-0 items-center gap-2 border-b px-4 bg-background">
-            <SidebarTrigger />
-            <div className="flex flex-row items-center justify-between w-full gap-x-4">
-                <EditorBreadcrumbs workflowId={workflowId} />
-                <EditorSaveButton workflowId={workflowId} />
-            </div>
-        </header>
-    )
-}
+  return (
+    <header className="bg-background flex h-14 shrink-0 items-center gap-2 border-b px-4">
+      <SidebarTrigger />
+      <div className="flex w-full flex-row items-center justify-between gap-x-4">
+        <EditorBreadcrumbs workflowId={workflowId} />
+        <EditorSaveButton workflowId={workflowId} />
+      </div>
+    </header>
+  );
+};

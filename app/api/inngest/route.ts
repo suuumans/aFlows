@@ -1,8 +1,6 @@
-
 import { serve } from "inngest/next";
 import { inngest } from "@/inngest/client";
 import { aiFunction, createPrismaWorkflow, helloWorld } from "@/inngest/functions";
-
 
 // create an api that serves functions
 export const { GET, POST, PUT } = serve({
