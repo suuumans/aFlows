@@ -44,7 +44,7 @@ export function NodeSelector({ open, onOpenChange, children }: NodeSelectorProps
 
   const { setNodes, getNodes, screenToFlowPosition } = useReactFlow()
 
-  const handelNodeSelector = useCallback((selectedNode: NodeTypeOption) => {
+  const handelNodeSelection = useCallback((selectedNode: NodeTypeOption) => {
 
     // check if the node is already added
     if (selectedNode.type === NodeType.MANUAL_TRIGGER) {
@@ -55,23 +55,32 @@ export function NodeSelector({ open, onOpenChange, children }: NodeSelectorProps
         return;
       }
     }
+    setNodes((nodes) => {
+      const hasInitialTrigger = nodes.some(
+        (node) => node.type === NodeType.INITIAL
+      )
 
-    const positionX = window.innerWidth / 2;
-    const positionY = window.innerHeight / 2;
+      const positionX = window.innerWidth / 2;
+      const positionY = window.innerHeight / 2;
+  
+      const flowPosition = screenToFlowPosition({ 
+        x: positionX + (Math.random() - 0.5) * 200,
+        y: positionY + (Math.random() - 0.5) * 200
+      });
+  
+      const newNode = {
+        id: createId(),
+        type: selectedNode.type,
+        position: flowPosition,
+        data: {}
+      }
 
-    const flowPosition = screenToFlowPosition({ 
-      x: positionX + (Math.random() - 0.5) * 200,
-      y: positionY + (Math.random() - 0.5) * 200
-    });
-
-    const newNode = {
-      id: createId(),
-      type: selectedNode.type,
-      position: flowPosition,
-      data: {}
-    }
-
-    setNodes((nodes) => [...nodes, newNode])
+      if (hasInitialTrigger) {
+        toast.error("Initial trigger node already exists");
+        return [newNode]
+      }
+      return [...nodes, newNode]
+    })
 
     onOpenChange(false);
   }, [setNodes, getNodes, screenToFlowPosition, onOpenChange])
@@ -93,7 +102,7 @@ export function NodeSelector({ open, onOpenChange, children }: NodeSelectorProps
           {triggerNodes.map((nodeType) => {
             const Icon = nodeType.icon;
             return (
-              <div key={nodeType.type} className="w-full justify-start h-auto py-5 px-4 rounded-none cursor-pointer border-l-2 border-transparent hover:border-l-primary" onClick={() => handelNodeSelector(nodeType)}>
+              <div key={nodeType.type} className="w-full justify-start h-auto py-5 px-4 rounded-none cursor-pointer border-l-2 border-transparent hover:border-l-primary" onClick={() => handelNodeSelection(nodeType)}>
                 <div className="flex items-center gap-6 w-full overflow-hidden">
                   {typeof Icon === "string" ? (
                     <img src={Icon} alt={nodeType.label} className="size-4 object-contain rounded-sm" />
@@ -118,7 +127,7 @@ export function NodeSelector({ open, onOpenChange, children }: NodeSelectorProps
           {executionNodes.map((nodeType) => {
             const Icon = nodeType.icon;
             return (
-              <div key={nodeType.type} className="w-full justify-start h-auto py-5 px-4 rounded-none cursor-pointer border-l-2 border-transparent hover:border-l-primary" onClick={() => handelNodeSelector(nodeType)}>
+              <div key={nodeType.type} className="w-full justify-start h-auto py-5 px-4 rounded-none cursor-pointer border-l-2 border-transparent hover:border-l-primary" onClick={() => handelNodeSelection(nodeType)}>
                 <div className="flex items-center gap-6 w-full overflow-hidden">
                   {typeof Icon === "string" ? (
                     <img src={Icon} alt={nodeType.label} className="size-4 object-contain rounded-sm" />
@@ -142,3 +151,6 @@ export function NodeSelector({ open, onOpenChange, children }: NodeSelectorProps
     </Sheet>
   )
 } 
+
+
+// 10h8m42s
