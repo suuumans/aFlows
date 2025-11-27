@@ -82,3 +82,26 @@ export const useUpdateWorkflowName = () => {
     })
   );
 };
+
+// hook to update a workflow
+export const useUpdateWorkflow = () => {
+  const queryClient = useQueryClient();
+  const trpc = useTRPC();
+
+  return useMutation(
+    trpc.workflows.update.mutationOptions({
+      onSuccess: (data) => {
+        toast.success(`Workflow "${data.name}" updated successfully`);
+
+        // invalidate the getAll query
+        queryClient.invalidateQueries(trpc.workflows.getAll.queryOptions({}));
+
+        // invalidate the getOne query
+        queryClient.invalidateQueries(trpc.workflows.getOne.queryOptions({ id: data.id }));
+      },
+      onError: (error) => {
+        toast.error(`Error updating workflow: ${error.message}`);
+      },
+    })
+  );
+};
