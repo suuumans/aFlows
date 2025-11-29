@@ -23,8 +23,14 @@ export const BaseExecutionNode = memo(({id, icon: Icon, name, description, child
   const { setNodes, setEdges } = useReactFlow();
 
   const handelDelete = () => {
-    setNodes((nodes) => nodes.filter((node) => node.id !== id));
-    setEdges((edges) => edges.filter((edge) => edge.source !== id && edge.target !== id));
+    setNodes((currentNodes) => {
+      const updatedNodes = currentNodes.filter((node) => node.id !== id)
+      return updatedNodes;
+    });
+    setEdges((currentEdges) => {
+      const updatedEdges = currentEdges.filter((edge) => edge.source !== id && edge.target !== id)
+      return updatedEdges;
+    });
   }
 
 

@@ -42,7 +42,7 @@ export const WorkflowsEditor = ({ workflowId }: { workflowId: string }) => {
 
   return (
     <div className="size-full">
-        <ReactFlow nodes={nodes} edges={edges} onNodesChange={onNodesChange} onEdgesChange={onEdgesChange} onConnect={onConnect} fitView={true} proOptions={{ hideAttribution: true }} nodeTypes={nodeComponents} onInit={setEditor}>
+        <ReactFlow nodes={nodes} edges={edges} onNodesChange={onNodesChange} onEdgesChange={onEdgesChange} onConnect={onConnect} fitView={true} proOptions={{ hideAttribution: true }} nodeTypes={nodeComponents} onInit={setEditor} snapGrid={[10, 10]} snapToGrid={true} panOnScroll={true} panOnDrag={true} selectionOnDrag={true}>
             <Background />
             <MiniMap />
             <Controls />
