@@ -7,6 +7,8 @@ import { ReactFlow, applyNodeChanges, applyEdgeChanges, addEdge, type Node, type
 import "@xyflow/react/dist/style.css";
 import { nodeComponents } from "@/config/node-components";
 import { AddNodeButton } from "./add-node-button";
+import { useSetAtom } from "jotai";
+import { editorAtom } from "../store/atoms";
 
 export const WorkflowsEditorLoading = () => {
   return <LoadingView message="Loading workflow editor..." />;
@@ -19,6 +21,8 @@ export const WorkflowsEditorError = () => {
 
 export const WorkflowsEditor = ({ workflowId }: { workflowId: string }) => {
   const { data: workflow } = useSuspenseWorkflow(workflowId);
+
+  const setEditor = useSetAtom(editorAtom);
 
   const [nodes, setNodes] = useState<Node[]>(workflow.nodes);
   const [edges, setEdges] = useState<Edge[]>(workflow.edges);
@@ -38,7 +42,7 @@ export const WorkflowsEditor = ({ workflowId }: { workflowId: string }) => {
 
   return (
     <div className="size-full">
-        <ReactFlow nodes={nodes} edges={edges} onNodesChange={onNodesChange} onEdgesChange={onEdgesChange} onConnect={onConnect} fitView={true} proOptions={{ hideAttribution: true }} nodeTypes={nodeComponents}>
+        <ReactFlow nodes={nodes} edges={edges} onNodesChange={onNodesChange} onEdgesChange={onEdgesChange} onConnect={onConnect} fitView={true} proOptions={{ hideAttribution: true }} nodeTypes={nodeComponents} onInit={setEditor} snapGrid={[10, 10]} snapToGrid={true} panOnScroll={true} panOnDrag={true} selectionOnDrag={true}>
             <Background />
             <MiniMap />
             <Controls />
@@ -49,3 +53,5 @@ export const WorkflowsEditor = ({ workflowId }: { workflowId: string }) => {
     </div>
   );
 };
+
+//10:56:56

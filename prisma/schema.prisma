@@ -92,6 +92,12 @@ model Workflow {
   user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
+enum NodeType {
+  INITIAL
+  MANUAL_TRIGGER
+  HTTP_REQUEST
+}
+
 model Node {
   id                String       @id @default(cuid())
   createdAt         DateTime     @default(now())
@@ -122,8 +128,4 @@ model Connection {
   workflow   Workflow  @relation(fields: [workflowId], references: [id], onDelete: Cascade)
 
   @@unique([fromNodeId, toNodeId, fromOutput, toInput])
-}
-
-enum NodeType {
-  INITIAL
 }
