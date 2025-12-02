@@ -2,12 +2,20 @@
 import type { NodeExecutor } from "@/features/executions/types";
 import { NonRetriableError } from "inngest";
 import ky, { type Options as KyOptions } from "ky";
+import Handlebars from "handlebars";
+
+// register json helper for handlebars
+Handlebars.registerHelper("json", (context) => {
+  const jsonString = JSON.stringify(context, null, 2)
+  const stringified = new Handlebars.SafeString(jsonString);
+  return stringified;
+});
 
 type HttpRequestData = {
-  variableName?: string;
-  endpoint?: string;
+  variableName: string;
+  endpoint: string;
   body?: string;
-  method?: "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
+  method: "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
 };
 
 export const httpRequestExecutor: NodeExecutor<HttpRequestData> = async ({ data, nodeId, context, step }) => {
@@ -24,13 +32,32 @@ export const httpRequestExecutor: NodeExecutor<HttpRequestData> = async ({ data,
     throw new NonRetriableError("Variable name is not configured");
   }
 
+  if (!data.method) {
+    // publish "error" state for http request
+    throw new NonRetriableError("Method is not configured");
+  }
+
   const result = await step.run("http-request", async () => {
-    const endpoint = data.endpoint!;
-    const method = data.method || "GET";
+    // const endpoint = Handlebars.compile(data.endpoint)(context);
+    // or
+    let endpoint: string;
+    try {
+      const template = Handlebars.compile(data.endpoint);
+      endpoint = template(context);
+      if (!endpoint || typeof endpoint !== 'string') {
+        throw new NonRetriableError("Endpoint template must resolve to an non-empty string");
+      }
+    } catch (error) {
+      throw new NonRetriableError(`HTTP Request node: Faild to resolve endpoint template: ${error}`)
+    }
+    
+    const method = data.method;
     const options: KyOptions = { method };
 
     if (["POST", "PUT", "PATCH"].includes(method)) {
-      options.body = data.body;
+      const resolved = Handlebars.compile(data.body || "")(context);
+      const parsed = JSON.parse(resolved);
+      options.body = parsed;
       options.headers = {
         "Content-Type": "application/json",
       }
@@ -40,7 +67,7 @@ export const httpRequestExecutor: NodeExecutor<HttpRequestData> = async ({ data,
     const contentType = response.headers.get("content-type")
     const responseData = contentType?.includes("application/json") ? await response.json() : await response.text();
     const responsePaload = {
-      [data.variableName!]: {
+      [data.variableName]: {
         status: response.status,
         data: responseData,
         statusText: response.statusText,
@@ -49,7 +76,7 @@ export const httpRequestExecutor: NodeExecutor<HttpRequestData> = async ({ data,
 
     return {
       ...context,
-      ...responsePaload,
+      [data.variableName]: responsePaload,
     }
   })
 
