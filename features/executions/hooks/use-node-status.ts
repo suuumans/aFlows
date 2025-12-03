@@ -11,6 +11,10 @@ interface UseNodeStatusOptions {
   refreshToken: () => Promise<Realtime.Subscribe.Token>;
 }
 
+const isValidNodeStatus = (status: string): status is NodeStatus => {
+  return typeof status === "string" && ["initial", "loading", "success", "error"].includes(status);
+}
+
 export function useNodeStatus({nodeId, channel, topic, refreshToken}: UseNodeStatusOptions) {
   
   const [status, setStatus] = useState<NodeStatus>("initial");
@@ -34,8 +38,8 @@ export function useNodeStatus({nodeId, channel, topic, refreshToken}: UseNodeSta
       return 0;
     })[0];
     
-    if (latestMessage) {  // or (latestMessage?.data === "data")
-      setStatus(latestMessage.data.status as NodeStatus);
+    if (latestMessage?.kind === "data" && isValidNodeStatus(latestMessage.data.status)) {  // or (latestMessage?.data === "data")
+      setStatus(latestMessage.data.status);  // or can add "as NodeStatus"
     }
   }, [data, nodeId, channel, topic])
 
