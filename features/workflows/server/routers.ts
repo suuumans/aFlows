@@ -6,8 +6,29 @@ import { generateSlug } from "random-word-slugs";
 import { createTRPCRouter, premeiumProcedure, proctedProcedure } from "@/trpc/init";
 import { NodeType } from "@/generated/prisma/enums";
 import type { Node, Edge } from "@xyflow/react";
+import { inngest } from "@/inngest/client";
 
 export const workflowsRouter = createTRPCRouter({
+
+  // execute a workflow
+  execute: proctedProcedure
+    .input(z.object({id: z.string() }))
+    .mutation(async ({ctx, input}) => {
+      const workflow = await prisma.workflow.findUniqueOrThrow({
+        where: {
+          id: input.id,
+          userId: ctx.session.user.id,
+        }
+      });
+
+      await inngest.send({
+        name: "workflows/execute.workflow",
+        data: { workflowId: input.id }
+      });
+
+      return workflow;
+    }),
+
   // create a workflow
   create: premeiumProcedure.mutation(({ ctx }) => {
     return prisma.workflow.create({

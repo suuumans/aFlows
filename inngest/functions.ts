@@ -1,67 +1,54 @@
-import { prisma } from "@/lib/db";
+
+import { NonRetriableError } from "inngest";
 import { inngest } from "./client";
-import { generateText } from "ai";
-import { createGoogleGenerativeAI } from "@ai-sdk/google";
-import { createOpenAI } from "@ai-sdk/openai";
-import * as Sentry from "@sentry/nextjs";
+import { prisma } from "@/lib/db";
+import { topologicalSort } from "./utils";
+import { NodeType } from "@/generated/prisma/enums";
+import { getExecutor } from "@/features/executions/lib/executor-registry";
+import { httpRequestChannel } from "./channels/http-request";
+import { manualTriggerChannel } from "./channels/manual-trigger";
 
-const gAi = createGoogleGenerativeAI();
-const openAi = createOpenAI();
+export const executeWorkflow = inngest.createFunction(
+  { id: "execute-workflow" },
+  { 
+    event: "workflows/execute.workflow",
+    channels: [httpRequestChannel(), manualTriggerChannel()]
+  },
+  async ({ event, step, publish }) => {
+    const workflowId = event.data.workflowId;
+    
+    if(!workflowId) {
+      throw new NonRetriableError("Workflow ID is required");
+    }
 
-// Create a simple test function
-export const helloWorld = inngest.createFunction(
-  { id: "hello-world" },
-  { event: "test/hello.world" },
-  async ({ event, step }) => {
-    await step.sleep("wait for 3 seconds", 3000);
-    await step.run("Send a hello world message", async () => {
-      return { message: `Hello ${event.data.name ?? "World"}!` };
-    });
-  }
-);
+    const sortedNodes = await step.run("prepare-workflow", async () => {
+      const workflow = await prisma.workflow.findUniqueOrThrow({
+        where: { id: workflowId },
+        include: {
+          nodes: true,
+          connections: true,
+        },
+      });
 
-export const createPrismaWorkflow = inngest.createFunction(
-  { id: "create-prisma-workflow" },
-  { event: "test/create.prisma.workflow" },
-  async ({ event, step }) => {
-    await prisma.Workflow.create({
-      data: {
-        name: event.data.name,
-      },
-    });
-  }
-);
+      return topologicalSort(workflow.nodes, workflow.connections);
+    })
 
-export const aiFunction = inngest.createFunction(
-  { id: "ai-function" },
-  { event: "test/ai.function" },
-  async ({ event, step }) => {
-    Sentry.logger.info("User triggered test log", { log_source: "sentry_test" });
+    // initialize the context with any initial data from the trigger
+    let context = event.data.initialData || {};
 
-    // this is inngest specific way of calling ai
-    const { steps: geminiSteps } = await step.ai.wrap("gemini-generate-text", generateText, {
-      model: gAi("gemini-2.5-flash"),
-      system: "You are a helpful ai assistant, you will solve any query of the user",
-      temperature: 1,
-      prompt: "what is 3 + 4?",
-      experimental_telemetry: {
-        isEnabled: true,
-        recordInputs: true,
-        recordOutputs: true,
-      },
-    });
+    // execute nodes in order
+    for (const node of sortedNodes) {
+      const executor = getExecutor(node.type as NodeType);
+      context = await executor({
+        data: node.data as Record<string, unknown>,
+        nodeId: node.id,
+        context,
+        step,
+        publish
+      })
+    }
 
-    // const { steps: openAiSteps } = await step.ai.wrap("openai-generate-text", generateText, {
-    //   model: openAi("gpt-3.5-turbo"),
-    //   temperature: 1,
-    //   prompt: "Do we humans even need ai?",
-    //   experimental_telemetry: {
-    //     isEnabled: true,
-    //     recordInputs: true,
-    //     recordOutputs: true,
-    //   },
-    // })
 
-    return { geminiSteps };
+    return { workflowId, result: context };
   }
 );

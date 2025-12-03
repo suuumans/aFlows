@@ -22,6 +22,7 @@ interface Props {
 }
 
 const formSchema = z.object({
+    variableName: z.string().min(1, "Variable name is required").regex(/^[a-zA-Z_][a-zA-Z0-9_]*$/, {message: "variable name should start with a letter or underscore and can only contain letters, numbers, and underscores"}),
     endpoint: z.url({ message: "Please enter a valid URL" }),
     method: z.enum(["GET", "POST", "PUT", "DELETE", "PATCH"]),
     body: z.string().optional(),
@@ -35,6 +36,7 @@ export const HttpRequestDialog = ({ open, onOpenChange, onSubmit, defaultValues 
             endpoint: defaultValues.endpoint || "",
             method: defaultValues.method || "GET",
             body: defaultValues.body || "",
+            variableName: defaultValues.variableName || "",
         },
     })
 
@@ -45,10 +47,12 @@ export const HttpRequestDialog = ({ open, onOpenChange, onSubmit, defaultValues 
                 endpoint: defaultValues.endpoint || "",
                 method: defaultValues.method || "GET",
                 body: defaultValues.body || "",
+                variableName: defaultValues.variableName || "",
             })
         }
     }, [open, defaultValues, form])
 
+    const watchVariableName = form.watch("variableName") || "variableName";
     const watchMethod = form.watch("method");
     const showBodyField = ["POST", "PUT", "PATCH"].includes(watchMethod);
 
@@ -67,7 +71,23 @@ export const HttpRequestDialog = ({ open, onOpenChange, onSubmit, defaultValues 
                     </DialogDescription>
                 </DialogHeader>
                 <Form {...form}>
+
+                    {/* variable name field */}
                     <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6 mt-4">
+                        <FormField control={form.control} name="variableName" render={({field}) => (
+                            <FormItem>
+                                <FormLabel>Variable Name</FormLabel>
+                                <FormControl>
+                                    <Input placeholder="variableName" {...field} />
+                                </FormControl>
+                                <FormDescription>
+                                    Use this variable name to reference the response in other nodes: {" "} {`{{${watchVariableName}.httpResponse.data}}`}
+                                </FormDescription>
+                                <FormMessage />
+                            </FormItem>
+                        )} />
+
+                        {/* method field */}
                         <FormField control={form.control} name="method" render={({field}) => (
                             <FormItem>
                                 <FormLabel>Method</FormLabel>
@@ -91,6 +111,8 @@ export const HttpRequestDialog = ({ open, onOpenChange, onSubmit, defaultValues 
                                 <FormMessage />
                             </FormItem>
                         )} />
+
+                        {/* endpoint field */}
                         <FormField control={form.control} name="endpoint" render={({field}) => (
                             <FormItem>
                                 <FormLabel>Endpoint</FormLabel>
@@ -103,6 +125,8 @@ export const HttpRequestDialog = ({ open, onOpenChange, onSubmit, defaultValues 
                                 <FormMessage />
                             </FormItem>
                         )} />
+
+                        {/* body field */}
                         {showBodyField && (
                             <FormField control={form.control} name="body" render={({field}) => (
                                 <FormItem>
