@@ -24,7 +24,10 @@ export const generateGoogleFormScript = ( webhookUrl: string ) => `function onFo
   var options = {
     'method': 'post',
     'contentType': 'application/json',
-    'payload': JSON.stringify(payload)
+    'payload': JSON.stringify(payload),
+    'headers': {
+      'x-google-webhook-secret': '🚨add-webhook-secret-here🚨'
+    },
   };
 
   var WEBHOOK_URL = '${webhookUrl}';

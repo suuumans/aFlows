@@ -54,8 +54,7 @@ export const GoogleFormTriggerDialog = ({ open, onOpenChange }: Props) => {
                             <ul className="list-disc list-inside text-sm text-muted-foreground space-y-1">
                                 <li>Go to your Google Form</li>
                                 <li>Click on the three dots menu → Script editor</li>
-                                <li>Copy and paste the following code below</li>
-                                <li>Replace the WEBHOOK_URL with the webhook URL above</li>
+                                <li>Copy and paste the following script below (URL is already embedded in the script)</li>
                                 <li>Save and click "Triggers" → + Add Trigger</li>
                                 <li>Select: From form → On form submit → Save</li>
                             </ul>

@@ -1,30 +1,30 @@
 
 import type { NodeExecutor } from "@/features/executions/types";
-import { manualTriggerChannel } from "@/inngest/channels/manual-trigger";
+import { googleFormTriggerChannel } from "@/inngest/channels/google-form-trigger";
 
-type ManualTriggerData = Record<string, unknown>;
+type GoogleFormTriggerData = Record<string, unknown>;
 
-export const manualTriggerExecutor: NodeExecutor<ManualTriggerData> = async ({ nodeId, context, step, publish }) => {
+export const googleFormTriggerExecutor: NodeExecutor<GoogleFormTriggerData> = async ({ nodeId, context, step, publish }) => {
   
-  // publish "loading" state for manual trigger
-  await publish(manualTriggerChannel().status({
+  // publish "loading" state for google form trigger
+  await publish(googleFormTriggerChannel().status({
     nodeId,
     status: "loading",
   }))
 
   try {
-    const result = await step.run("manual-trigger", async () => context)
+    const result = await step.run("google-form-trigger", async () => context)
 
-    // publish "success" state for manual trigger
-    await publish(manualTriggerChannel().status({
+    // publish "success" state for google form trigger
+    await publish(googleFormTriggerChannel().status({
       nodeId,
       status: "success",
     }))
 
     return result;
   } catch (error) {
-    // publish "error" state for manual trigger
-    await publish(manualTriggerChannel().status({
+    // publish "error" state for google form trigger
+    await publish(googleFormTriggerChannel().status({
       nodeId,
       status: "error",
     }))
