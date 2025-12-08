@@ -28,6 +28,12 @@ const triggerNodes: NodeTypeOption[] = [
     label: "Google Form",
     description: "Runs when a google form is submitted",
     icon: "/logos/google-form-logo.svg",
+  },
+  {
+    type: NodeType.STRIPE_TRIGGER,
+    label: "Stripe Trigger",
+    description: "Runs when a stripe event is triggered",
+    icon: "/logos/Stripe-logo.svg",
   }
 ];
 
@@ -157,6 +163,3 @@ export function NodeSelector({ open, onOpenChange, children }: NodeSelectorProps
     </Sheet>
   )
 } 
-
-
-// 10h8m42s
