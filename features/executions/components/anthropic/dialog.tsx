@@ -12,22 +12,19 @@ import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 
 
-export type GeminiFormValues = z.infer<typeof formSchema>;
+export type AnthropicFormValues = z.infer<typeof formSchema>;
 
 interface Props {
     open: boolean;
     onOpenChange: (open: boolean) => void;
-    onSubmit: (data: GeminiFormValues) => void;
-    defaultValues?: Partial<GeminiFormValues>;
+    onSubmit: (data: AnthropicFormValues) => void;
+    defaultValues?: Partial<AnthropicFormValues>;
 }
 
 export const AVAILABLE_MODELS = [
-    "gemini-2.5-flash",
-    "gemini-2.5-flash-lite",
-    "gemini-2.0-flash",
-    "gemini-2.0-flash-lite",
-    "gemini-1.5-pro",
-
+    "claude-3-5-sonnet-20241022",
+    "claude-3-haiku-20240307",
+    "claude-3-opus-20240229",
 ] as const;
 
 const formSchema = z.object({
@@ -38,8 +35,8 @@ const formSchema = z.object({
 })
 
 
-export const GeminiDialog = ({ open, onOpenChange, onSubmit, defaultValues = {} }: Props) => {
-    const form = useForm<GeminiFormValues>({
+export const AnthropicDialog = ({ open, onOpenChange, onSubmit, defaultValues = {} }: Props) => {
+    const form = useForm<AnthropicFormValues>({
         resolver: zodResolver(formSchema),
         defaultValues: {
             model: defaultValues.model || AVAILABLE_MODELS[0],
@@ -61,9 +58,9 @@ export const GeminiDialog = ({ open, onOpenChange, onSubmit, defaultValues = {} 
         }
     }, [open, defaultValues, form])
 
-    const watchVariableName = form.watch("variableName") || "geminiTest";
+    const watchVariableName = form.watch("variableName") || "anthropicTest";
 
-    const handleSubmit = (data: GeminiFormValues) => {
+    const handleSubmit = (data: AnthropicFormValues) => {
         onSubmit(data);
         onOpenChange(false);
     }
@@ -72,9 +69,9 @@ export const GeminiDialog = ({ open, onOpenChange, onSubmit, defaultValues = {} 
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent>
                 <DialogHeader>
-                    <DialogTitle>Gemini Configuration</DialogTitle>
+                    <DialogTitle>Anthropic Configuration</DialogTitle>
                     <DialogDescription>
-                        Configure the Gemini ai model and prompts for this node
+                        Configure the Anthropic model and prompts for this node
                     </DialogDescription>
                 </DialogHeader>
                 <Form {...form}>
@@ -85,7 +82,7 @@ export const GeminiDialog = ({ open, onOpenChange, onSubmit, defaultValues = {} 
                             <FormItem>
                                 <FormLabel>Variable Name</FormLabel>
                                 <FormControl>
-                                    <Input placeholder="geminiTest" {...field} />
+                                    <Input placeholder="anthropicTest" {...field} />
                                 </FormControl>
                                 <FormDescription>
                                     Use this variable name to reference the response in other nodes: {" "} {`{{${watchVariableName}.response}}`}
@@ -113,12 +110,12 @@ export const GeminiDialog = ({ open, onOpenChange, onSubmit, defaultValues = {} 
                                     </Select>
                                 </FormControl>
                                 <FormDescription>
-                                    Select the model to use for the Gemini AI
+                                    Select the model to use for the Anthropic
                                 </FormDescription>
                                 <FormMessage />
                             </FormItem>
                         )} />
-                        {/* Gemini system prompt field */}
+                        {/* Anthropic system prompt field */}
                         <FormField control={form.control} name="systemPrompt" render={({field}) => (
                             <FormItem>
                                 <FormLabel>System Prompt</FormLabel>
@@ -126,7 +123,7 @@ export const GeminiDialog = ({ open, onOpenChange, onSubmit, defaultValues = {} 
                                     <Textarea placeholder={'You are a helpful assistant.'} className="min-h-[80px] font-mono text-sm" {...field} />
                                 </FormControl>
                                 <FormDescription>
-                                    System prompt sets the behavior of the Gemini model. Use {"{{variables}}"} for simple values or {"{{json variables}}"} to stringify objects
+                                    System prompt sets the behavior of the Anthropic model. Use {"{{variables}}"} for simple values or {"{{json variables}}"} to stringify objects
                                 </FormDescription>
                                 <FormMessage />
                             </FormItem>
