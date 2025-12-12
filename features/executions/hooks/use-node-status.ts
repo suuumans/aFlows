@@ -32,10 +32,11 @@ export function useNodeStatus({nodeId, channel, topic, refreshToken}: UseNodeSta
       (message) => message.kind === "data" && message.channel === channel && message.topic === topic && message.data.nodeId === nodeId
     )
     .sort((a, b) => {
-      if (a.kind === "data" && b.kind === "data") {
-        return (new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
-      }
-      return 0;
+      // sort by created at if available, otherwise by index (arrival order)
+      const timeA = a.kind === "data" && a.createdAt ? new Date(a.createdAt).getTime() : 0;
+      const timeB = b.kind === "data" && b.createdAt ? new Date(b.createdAt).getTime() : 0;
+      
+      return timeB - timeA;
     })[0];
     
     if (latestMessage?.kind === "data" && isValidNodeStatus(latestMessage.data.status)) {  // or (latestMessage?.data === "data")

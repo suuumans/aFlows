@@ -34,6 +34,12 @@ const triggerNodes: NodeTypeOption[] = [
     label: "Stripe Trigger",
     description: "Runs when a stripe event is triggered",
     icon: "/logos/Stripe-logo.svg",
+  },
+  {
+    type: NodeType.GEMINI,
+    label: "Gemini",
+    description: "Uses Gemini to generate response",
+    icon: "/logos/Gemini.svg"
   }
 ];
 
