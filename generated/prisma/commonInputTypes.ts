@@ -216,6 +216,23 @@ export type JsonWithAggregatesFilterBase<$PrismaModel = never> = {
   _max?: Prisma.NestedJsonFilter<$PrismaModel>
 }
 
+export type EnumCredentialTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.CredentialType | Prisma.EnumCredentialTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.CredentialType[] | Prisma.ListEnumCredentialTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.CredentialType[] | Prisma.ListEnumCredentialTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumCredentialTypeFilter<$PrismaModel> | $Enums.CredentialType
+}
+
+export type EnumCredentialTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.CredentialType | Prisma.EnumCredentialTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.CredentialType[] | Prisma.ListEnumCredentialTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.CredentialType[] | Prisma.ListEnumCredentialTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumCredentialTypeWithAggregatesFilter<$PrismaModel> | $Enums.CredentialType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumCredentialTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumCredentialTypeFilter<$PrismaModel>
+}
+
 export type NestedStringFilter<$PrismaModel = never> = {
   equals?: string | Prisma.StringFieldRefInput<$PrismaModel>
   in?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
@@ -402,6 +419,23 @@ export type NestedJsonFilterBase<$PrismaModel = never> = {
   gt?: runtime.InputJsonValue | Prisma.JsonFieldRefInput<$PrismaModel>
   gte?: runtime.InputJsonValue | Prisma.JsonFieldRefInput<$PrismaModel>
   not?: runtime.InputJsonValue | Prisma.JsonFieldRefInput<$PrismaModel> | Prisma.JsonNullValueFilter
+}
+
+export type NestedEnumCredentialTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.CredentialType | Prisma.EnumCredentialTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.CredentialType[] | Prisma.ListEnumCredentialTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.CredentialType[] | Prisma.ListEnumCredentialTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumCredentialTypeFilter<$PrismaModel> | $Enums.CredentialType
+}
+
+export type NestedEnumCredentialTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.CredentialType | Prisma.EnumCredentialTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.CredentialType[] | Prisma.ListEnumCredentialTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.CredentialType[] | Prisma.ListEnumCredentialTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumCredentialTypeWithAggregatesFilter<$PrismaModel> | $Enums.CredentialType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumCredentialTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumCredentialTypeFilter<$PrismaModel>
 }
 
 

@@ -57,3 +57,8 @@ export type Node = Prisma.NodeModel
  * 
  */
 export type Connection = Prisma.ConnectionModel
+/**
+ * Model Credential
+ * 
+ */
+export type Credential = Prisma.CredentialModel

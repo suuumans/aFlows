@@ -21,3 +21,12 @@ export const NodeType = {
 } as const
 
 export type NodeType = (typeof NodeType)[keyof typeof NodeType]
+
+
+export const CredentialType = {
+  ANTHROPIC: 'ANTHROPIC',
+  GEMINI: 'GEMINI',
+  OPENAI: 'OPENAI'
+} as const
+
+export type CredentialType = (typeof CredentialType)[keyof typeof CredentialType]
