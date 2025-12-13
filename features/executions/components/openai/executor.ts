@@ -73,7 +73,7 @@ export const openaiExecutor: NodeExecutor<OpenAINodeData> = async ({ data, nodeI
       }
     })
 
-    const response = steps[0].content[0].type === "text" ? steps[0].content[0].text : "";
+    const response = steps?.[0]?.content?.[0]?.type === "text" ? steps[0].content[0].text : "";
 
     await publish(openaiChannel().status({
       nodeId,
