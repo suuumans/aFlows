@@ -34,6 +34,24 @@ const triggerNodes: NodeTypeOption[] = [
     label: "Stripe Trigger",
     description: "Runs when a stripe event is triggered",
     icon: "/logos/Stripe-logo.svg",
+  },
+  {
+    type: NodeType.GEMINI,
+    label: "Gemini",
+    description: "Uses Gemini to generate response",
+    icon: "/logos/Gemini.svg"
+  },
+  {
+    type: NodeType.OPENAI,
+    label: "OpenAI",
+    description: "Uses OpenAI to generate response",
+    icon: "/logos/OpenAI-Logo.svg"
+  },
+  {
+    type: NodeType.ANTHROPIC,
+    label: "Anthropic",
+    description: "Uses Anthropic to generate response",
+    icon: "/logos/Anthropic.svg"
   }
 ];
 
