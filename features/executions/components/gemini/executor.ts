@@ -73,7 +73,7 @@ export const geminiExecutor: NodeExecutor<GeminiNodeData> = async ({ data, nodeI
       }
     })
 
-    const response = steps[0].content[0].type === "text" ? steps[0].content[0].text : "";
+    const response = steps?.[0]?.content?.[0]?.type === "text" ? steps[0].content[0].text : "";
 
     await publish(geminiChannel().status({
       nodeId,

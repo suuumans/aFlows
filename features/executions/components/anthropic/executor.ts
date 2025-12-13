@@ -73,7 +73,7 @@ export const anthropicExecutor: NodeExecutor<AnthropicNodeData> = async ({ data,
       }
     })
 
-    const response = steps[0].content[0].type === "text" ? steps[0].content[0].text : "";
+    const response = steps?.[0]?.content?.[0]?.type === "text" ? steps[0].content[0].text : "";
 
     await publish(anthropicChannel().status({
       nodeId,
