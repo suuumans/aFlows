@@ -52,11 +52,13 @@ export const anthropicExecutor: NodeExecutor<AnthropicNodeData> = async ({ data,
   // get credential value from user data
   const credentialValue = await step.run("get-credential", async () => {
     try {
-      return prisma.credential.findUnique({
+      const credential = await prisma.credential.findFirst({
         where: {
           id: data.credentialId,
+          userId: context.userId as string,
         }
       })
+      return credential?.value;
     } catch (error) {
       throw new NonRetriableError("Anthropic node: credential not found");
     }
@@ -71,7 +73,7 @@ export const anthropicExecutor: NodeExecutor<AnthropicNodeData> = async ({ data,
   }
 
   const anthropic = createAnthropic({
-    apiKey: credentialValue.value,
+    apiKey: credentialValue,
   })
 
   try {

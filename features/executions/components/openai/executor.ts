@@ -53,11 +53,13 @@ export const openaiExecutor: NodeExecutor<OpenAINodeData> = async ({ data, nodeI
   // get credential value from user data
   const credentialValue = await step.run("get-credential", async () => {
     try {
-      return prisma.credential.findUnique({
+      const credential = await prisma.credential.findUnique({
         where: {
           id: data.credentialId,
+          userId: context.userId as string,
         }
       })
+      return credential?.value;
     } catch (error) {
       throw new NonRetriableError("OpenAI node: credential not found");
     }
@@ -72,7 +74,7 @@ export const openaiExecutor: NodeExecutor<OpenAINodeData> = async ({ data, nodeI
   }
 
   const openai = createOpenAI({
-    apiKey: credentialValue.value,
+    apiKey: credentialValue,
   })
 
   try {
