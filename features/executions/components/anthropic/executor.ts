@@ -5,6 +5,7 @@ import { anthropicChannel } from "@/inngest/channels/anthropic";
 import { createAnthropic } from "@ai-sdk/anthropic";
 import type { NodeExecutor } from "@/features/executions/types";
 import { NonRetriableError } from "inngest";
+import { prisma } from "@/lib/db";
 
 // register json helper for handlebars
 Handlebars.registerHelper("json", (context) => {
@@ -15,6 +16,7 @@ Handlebars.registerHelper("json", (context) => {
 
 type AnthropicNodeData = {
   variableName?: string;
+  credentialId?: string;
   model?: string;
   systemPrompt?: string;
   userPrompt?: string;
@@ -47,18 +49,29 @@ export const anthropicExecutor: NodeExecutor<AnthropicNodeData> = async ({ data,
     throw new NonRetriableError("Anthropic node: userPrompt is required");
   }
   
-  // get credential value from env
-  const credentialValue = process.env.ANTHROPIC_API_KEY;
+  // get credential value from user data
+  const credentialValue = await step.run("get-credential", async () => {
+    try {
+      return prisma.credential.findUnique({
+        where: {
+          id: data.credentialId,
+        }
+      })
+    } catch (error) {
+      throw new NonRetriableError("Anthropic node: credential not found");
+    }
+  })
+
   if (!credentialValue) {
     await publish(anthropicChannel().status({
       nodeId,
       status: "error",
     }))
-    throw new NonRetriableError("Anthropic node: ANTHROPIC_API_KEY is not set");
+    throw new NonRetriableError("Anthropic node: credential not found");
   }
 
   const anthropic = createAnthropic({
-    apiKey: credentialValue,
+    apiKey: credentialValue.value,
   })
 
   try {

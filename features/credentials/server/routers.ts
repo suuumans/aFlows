@@ -157,11 +157,15 @@ export const credentialsRouter = createTRPCRouter({
       id: z.string(),
       name: z.string().min(3, "Name must be at least 3 characters long"),
       type: z.enum(CredentialType),
-      value: z.string().min(1, "Value is required"),
+      value: z.string().min(1, "Value is required").optional(),
     })
   ).mutation(async ({ ctx, input }) => {
     const { id, name, type, value } = input;
-    const hashedValue = await bcrypt.hash(value, 10);
+    
+    let hashedValue: string | undefined;
+    if (value) {
+      hashedValue = await bcrypt.hash(value, 10);
+    }
 
     try {
       return prisma.credential.update({
@@ -172,7 +176,7 @@ export const credentialsRouter = createTRPCRouter({
         data: {
           name,
           type,
-          value: hashedValue,
+          ...(hashedValue ? { value: hashedValue } : {}),
         },
       })
     } catch (error) {
