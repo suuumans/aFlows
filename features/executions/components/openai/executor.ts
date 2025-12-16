@@ -5,6 +5,7 @@ import { openaiChannel } from "@/inngest/channels/openai";
 import { createOpenAI } from "@ai-sdk/openai";
 import type { NodeExecutor } from "@/features/executions/types";
 import { NonRetriableError } from "inngest";
+import { prisma } from "@/lib/db";
 
 // register json helper for handlebars
 Handlebars.registerHelper("json", (context) => {
@@ -13,8 +14,10 @@ Handlebars.registerHelper("json", (context) => {
   return stringified;
 });
 
+
 type OpenAINodeData = {
   variableName?: string;
+  credentialId?: string;
   model?: string;
   systemPrompt?: string;
   userPrompt?: string;
@@ -47,14 +50,27 @@ export const openaiExecutor: NodeExecutor<OpenAINodeData> = async ({ data, nodeI
     throw new NonRetriableError("OpenAI node: userPrompt is required");
   }
   
-  // get credential value from env
-  const credentialValue = process.env.OPENAI_API_KEY;
+  // get credential value from user data
+  const credentialValue = await step.run("get-credential", async () => {
+    try {
+      const credential = await prisma.credential.findUnique({
+        where: {
+          id: data.credentialId,
+          userId: context.userId as string,
+        }
+      })
+      return credential?.value;
+    } catch (error) {
+      throw new NonRetriableError("OpenAI node: credential not found");
+    }
+  })
+
   if (!credentialValue) {
     await publish(openaiChannel().status({
       nodeId,
       status: "error",
     }))
-    throw new NonRetriableError("OpenAI node: OPENAI_API_KEY is not set");
+    throw new NonRetriableError("OpenAI node: credential not found");
   }
 
   const openai = createOpenAI({
