@@ -22,7 +22,7 @@ type GeminiNodeData = {
   userPrompt?: string;
 };
 
-export const geminiExecutor: NodeExecutor<GeminiNodeData> = async ({ data, nodeId, context, step, publish }) => {
+export const geminiExecutor: NodeExecutor<GeminiNodeData> = async ({ userId, data, nodeId, context, step, publish }) => {
   
   // publish "loading" state for http request
   await publish(geminiChannel().status({
@@ -56,7 +56,7 @@ export const geminiExecutor: NodeExecutor<GeminiNodeData> = async ({ data, nodeI
       const credential = await prisma.credential.findUnique({
         where: {
           id: data.credentialId,
-          userId: context.userId as string,
+          userId,
         }
       })
       return credential?.value;
