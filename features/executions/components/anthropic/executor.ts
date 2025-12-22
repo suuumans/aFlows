@@ -22,7 +22,7 @@ type AnthropicNodeData = {
   userPrompt?: string;
 };
 
-export const anthropicExecutor: NodeExecutor<AnthropicNodeData> = async ({ data, nodeId, context, step, publish }) => {
+export const anthropicExecutor: NodeExecutor<AnthropicNodeData> = async ({ userId, data, nodeId, context, step, publish }) => {
   
   // publish "loading" state for http request
   await publish(anthropicChannel().status({
@@ -52,10 +52,10 @@ export const anthropicExecutor: NodeExecutor<AnthropicNodeData> = async ({ data,
   // get credential value from user data
   const credentialValue = await step.run("get-credential", async () => {
     try {
-      const credential = await prisma.credential.findFirst({
+      const credential = await prisma.credential.findUnique({
         where: {
           id: data.credentialId,
-          userId: context.userId as string,
+          userId,
         }
       })
       return credential?.value;
