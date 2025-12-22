@@ -52,6 +52,18 @@ const triggerNodes: NodeTypeOption[] = [
     label: "Anthropic",
     description: "Uses Anthropic to generate response",
     icon: "/logos/Anthropic.svg"
+  },
+  {
+    type: NodeType.SLACK,
+    label: "Slack",
+    description: "Send a message to Slack",
+    icon: "/logos/Slack-Icon.svg"
+  },
+  {
+    type: NodeType.DISCORD,
+    label: "Discord",
+    description: "Send a message to Discord",
+    icon: "/logos/Discord-Icon.svg"
   }
 ];
 
