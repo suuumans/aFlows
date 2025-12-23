@@ -178,4 +178,6 @@ model Execution {
   status         ExecutionStatus @default(RUNNING)
   error          String?         @db.Text
   errorStack     String?         @db.Text
+
+  @@index([workflowId, startedAt(sort: Desc)])
 }
