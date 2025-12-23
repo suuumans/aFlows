@@ -89,6 +89,7 @@ model Workflow {
   deletedAt   DateTime?
   userId      String
   connections Connection[]
+  executions  Execution[]
   nodes       Node[]
   user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
@@ -158,4 +159,23 @@ enum CredentialType {
   ANTHROPIC
   GEMINI
   OPENAI
+}
+
+enum ExecutionStatus {
+  RUNNING
+  SUCCESS
+  FAILED
+}
+
+model Execution {
+  id             String          @id @default(cuid())
+  startedAt      DateTime        @default(now())
+  completedAt    DateTime?
+  inngestEventId String          @unique
+  output         Json?
+  workflowId     String
+  workflow       Workflow        @relation(fields: [workflowId], references: [id], onDelete: Cascade)
+  status         ExecutionStatus @default(RUNNING)
+  error          String?         @db.Text
+  errorStack     String?         @db.Text
 }

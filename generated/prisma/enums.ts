@@ -32,3 +32,12 @@ export const CredentialType = {
 } as const
 
 export type CredentialType = (typeof CredentialType)[keyof typeof CredentialType]
+
+
+export const ExecutionStatus = {
+  RUNNING: 'RUNNING',
+  SUCCESS: 'SUCCESS',
+  FAILED: 'FAILED'
+} as const
+
+export type ExecutionStatus = (typeof ExecutionStatus)[keyof typeof ExecutionStatus]
