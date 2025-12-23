@@ -21,7 +21,7 @@ import React from "react";
 type ExecutionHeaderProps = {
   title: string;
   description: string;
-  newButtonLabel: string;
+  newButtonLabel?: string;
   disabled?: boolean;
   isCreating?: boolean;
 } & (
