@@ -66,7 +66,7 @@ export const executionsRouter = createTRPCRouter({
   getAll: proctedProcedure
     .input(
       z.object({
-        page: z.number().default(PAGINATION.DEFAULT_PAGE),
+        page: z.number().min(PAGINATION.DEFAULT_PAGE).default(PAGINATION.DEFAULT_PAGE),
         pageSize: z
           .number()
           .min(PAGINATION.MIN_PAGE_SIZE)

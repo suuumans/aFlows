@@ -95,6 +95,10 @@ const getStatusIcon = (status: ExecutionStatus) => {
   }
 };
 
+const formatStatus = (status: ExecutionStatus) => {
+  return status.charAt(0) + status.slice(1).toLowerCase();
+}
+
 export const ExecutionItem = ({ data }: { data: Execution & { workflow: { id: string, name: string } } }) => {
 
   const duration = data.completedAt ? Math.round((new Date(data.completedAt).getTime() - new Date(data.startedAt).getTime()) / 1000) : 0;
@@ -110,7 +114,8 @@ export const ExecutionItem = ({ data }: { data: Execution & { workflow: { id: st
   return (
     <BaseExecutionItem
       href={`/executions/${data.id}`}
-      title={data.workflow.name}
+      title={formatStatus(data.status)}
+      // title={data.workflow.name}
       subtitle={subtitle}
       image={
         <div className="flex size-8 items-center justify-center">
