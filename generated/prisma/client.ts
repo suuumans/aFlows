@@ -84,3 +84,8 @@ export type Connection = Prisma.ConnectionModel
  * 
  */
 export type Credential = Prisma.CredentialModel
+/**
+ * Model Execution
+ * 
+ */
+export type Execution = Prisma.ExecutionModel
