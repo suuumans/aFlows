@@ -4,7 +4,7 @@ import { prisma } from "@/lib/db";
 import { PAGINATION } from "@/config/constants";
 import { createTRPCRouter, premeiumProcedure, proctedProcedure } from "@/trpc/init";
 import { CredentialType } from "@/generated/prisma/enums";
-import bcrypt from "bcryptjs";
+
 import { TRPCError } from "@trpc/server";
 
 export const credentialsRouter = createTRPCRouter({
