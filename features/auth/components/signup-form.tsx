@@ -40,6 +40,44 @@ export function SignupForm() {
     },
   });
 
+  const signInWithGithub = async () => {
+    try {
+      await authClient.signIn.social({provider: "github"},
+        {
+          onSuccess: () => {
+            toast.success("Logged in successfully");
+            router.push("/");
+          },
+          onError: (error) => {
+            toast.error(error.error.message);
+          },
+        }
+      );
+    } catch (error) {
+      toast.error("Something went wrong");
+      console.log(error);
+    }
+  };
+
+  const signInWithGoogle = async () => {
+    try {
+      await authClient.signIn.social({provider: "google"},
+        {
+          onSuccess: () => {
+            toast.success("Logged in successfully");
+            router.push("/");
+          },
+          onError: (error) => {
+            toast.error(error.error.message);
+          },
+        }
+      );
+    } catch (error) {
+      toast.error("Something went wrong");
+      console.log(error);
+    }
+  };
+
   const onSubmit = async (values: signupFormValues) => {
     try {
       await authClient.signUp.email(
@@ -79,11 +117,11 @@ export function SignupForm() {
             <form onSubmit={form.handleSubmit(onSubmit)}>
               <div className="grid gap-6">
                 <div className="flex flex-col gap-4">
-                  <Button variant="outline" className="w-full" type="button" disabled={isPending}>
+                  <Button variant="outline" className="w-full" type="button" disabled={isPending} onClick={signInWithGithub}>
                     <Image src="/logos/github-mark.svg" alt="github" width={20} height={20} />
                     Continue with Github
                   </Button>
-                  <Button variant="outline" className="w-full" type="button" disabled={isPending}>
+                  <Button variant="outline" className="w-full" type="button" disabled={isPending} onClick={signInWithGoogle}>
                     <Image src="/logos/Google-Multicolor-Icons.svg" alt="google" width={20} height={20} />
                     Continue with Google
                   </Button>
