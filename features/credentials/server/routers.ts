@@ -4,7 +4,7 @@ import { prisma } from "@/lib/db";
 import { PAGINATION } from "@/config/constants";
 import { createTRPCRouter, premeiumProcedure, proctedProcedure } from "@/trpc/init";
 import { CredentialType } from "@/generated/prisma/enums";
-
+import { encrypt, decrypt } from "@/lib/encryption";
 import { TRPCError } from "@trpc/server";
 
 export const credentialsRouter = createTRPCRouter({
@@ -22,13 +22,13 @@ export const credentialsRouter = createTRPCRouter({
 
       const { name, type, value } = input;
 
-      const hashedValue = await bcrypt.hash(value, 10);
+      const encryptedValue = encrypt(value);
 
       return prisma.credential.create({
         data: {
           name,
           type,
-          value: hashedValue,
+          value: encryptedValue,
           userId: ctx.session.user.id,
         },
       });
@@ -162,9 +162,9 @@ export const credentialsRouter = createTRPCRouter({
   ).mutation(async ({ ctx, input }) => {
     const { id, name, type, value } = input;
     
-    let hashedValue: string | undefined;
+    let encryptedValue: string | undefined;
     if (value) {
-      hashedValue = await bcrypt.hash(value, 10);
+      encryptedValue = encrypt(value);
     }
 
     try {
@@ -176,7 +176,8 @@ export const credentialsRouter = createTRPCRouter({
         data: {
           name,
           type,
-          ...(hashedValue ? { value: hashedValue } : {}),
+          // ...(encryptedValue ? { value: encryptedValue } : {}),
+          value: encryptedValue,
         },
       })
     } catch (error) {

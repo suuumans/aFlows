@@ -6,6 +6,7 @@ import { createOpenAI } from "@ai-sdk/openai";
 import type { NodeExecutor } from "@/features/executions/types";
 import { NonRetriableError } from "inngest";
 import { prisma } from "@/lib/db";
+import { decrypt } from "@/lib/encryption";
 
 // register json helper for handlebars
 Handlebars.registerHelper("json", (context) => {
@@ -74,7 +75,7 @@ export const openaiExecutor: NodeExecutor<OpenAINodeData> = async ({ userId, dat
   }
 
   const openai = createOpenAI({
-    apiKey: credentialValue,
+    apiKey: decrypt(credentialValue),
   })
 
   try {
